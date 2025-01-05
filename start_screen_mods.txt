@@ -1,0 +1,3 @@
+0 - start
+1 - shop
+2 - settings
