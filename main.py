@@ -55,7 +55,7 @@ class Player(pg.sprite.Sprite):
 
     def __init__(self, *groups: list):
         super().__init__(*groups)
-        self.health = 1
+        self.health = 3
         self.image = self.img
         self.rect = self.image.get_rect()
         self.speed = 5
@@ -71,6 +71,17 @@ class Player(pg.sprite.Sprite):
         angle = (180 / math.pi) * -math.atan2(rel_y, rel_x)
         self.image = pg.transform.rotate(self.img, int(angle))
         self.rect = self.image.get_rect(center=(x, y))
+
+    def heath_bar(self):
+        fx = self.rect.center[0] - 60
+        lx = self.rect.center[0] + 60
+        fy = self.rect.center[1] - 100
+        pg.draw.line(screen, "DarkRed", (fx, fy), (lx, fy), 10)
+
+        fx = self.rect.center[0] - 58
+        lx = fx + (116 * (self.health / 3))
+
+        pg.draw.line(screen, "red", (fx, fy), (lx, fy), 6)
 
     def laser(self):
         mouse_x, mouse_y = pg.mouse.get_pos()
@@ -104,6 +115,7 @@ class Player(pg.sprite.Sprite):
                 self.counter = 100
         if self.counter > 0:
             self.counter -= 1
+        self.heath_bar()
 
 
 class BulletE(pg.sprite.Sprite):
@@ -176,10 +188,10 @@ if __name__ == "__main__":
     f1 = pg.font.Font(None, 36)
 
     # Задача времени запуска программы
-    start_start = time.time()
+    start_time = time.time()
     # Включение спавна
     spawn_toggle = True
-
+    elapsed = 0
     run = True
     while run:
         screen.fill('grey')
@@ -203,24 +215,19 @@ if __name__ == "__main__":
         player_group.update()
         player_group.draw(screen)
         if player.alive():
-            fx = player.rect.center[0] - 60
-            lx = player.rect.center[0] + 60
-            fy = player.rect.center[1] - 100
-            pg.draw.line(screen, "DarkRed", (fx, fy), (lx, fy), 10)
-
-            fx = player.rect.center[0] - 58
-            lx = fx + (116 * (player.health / 3))
-            fy = player.rect.center[1] - 100
-
-            pg.draw.line(screen, "red", (fx, fy), (lx, fy), 6)
+            elapsed = time.time() - start_time
         else:
             w = int(screen.get_height() / 3)
             fy = int(screen.get_height() / 3) + w / 2
-            f2 = pg.font.Font(None, int(w/2))
+            f2 = pg.font.Font(None, int(w / 2))
             pg.draw.line(screen, "black", (0, fy), (screen.get_width(), fy), w)
             text_end = f2.render(f"Lose", 1, (180, 0, 0))
-            screen.blit(text_end, (int(screen.get_width() / 2 - text_end.get_width()/2), fy - text_end.get_height()/2))
-        elapsed = time.time() - start_start
+            screen.blit(text_end,
+                        (int(screen.get_width() / 2 - text_end.get_width() / 2), fy - text_end.get_height() / 2))
+            keys = pg.key.get_pressed()
+            if keys[pg.K_SPACE]:
+                player = Player([player_group])
+                start_time = time.time()
         text_seconds = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
 
         text1 = f1.render(f"hp:{player.health} cd:{player.counter}", 1, (180, 0, 0))
