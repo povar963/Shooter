@@ -26,7 +26,7 @@ class Enemy(pg.sprite.Sprite):
         pass
         x = self.rect.center[0]
         y = self.rect.center[1]
-        bullet = BulletE([bullets], x=x, y=y)
+        BulletE([bullets], x=x, y=y)
 
     def watch(self):
         x = self.rect.center[0]
@@ -59,7 +59,8 @@ class Player(pg.sprite.Sprite):
         self.image = self.img
         self.rect = self.image.get_rect()
         self.speed = 5
-        self.counter = 100
+        self.counter = 0
+        self.def_counter = 100
         self.rect.x = screen.get_width() / 2 - self.rect.width
         self.rect.y = screen.get_height() / 2 - self.rect.height
 
@@ -97,16 +98,16 @@ class Player(pg.sprite.Sprite):
     def shoot(self):
         x = self.rect.center[0]
         y = self.rect.center[1]
-        bullet = BulletF([bullets], x=x, y=y)
+        BulletF([bullets], x=x, y=y)
 
-    def control(self, keys):
-        if keys[pg.K_w]:
+    def control(self, key):
+        if key[pg.K_w]:
             self.rect.y -= self.speed
-        if keys[pg.K_s]:
+        if key[pg.K_s]:
             self.rect.y += self.speed
-        if keys[pg.K_d]:
+        if key[pg.K_d]:
             self.rect.x += self.speed
-        if keys[pg.K_a]:
+        if key[pg.K_a]:
             self.rect.x -= self.speed
 
     def update(self):
@@ -118,7 +119,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_SPACE]:
             if self.counter <= 0:
                 self.shoot()
-                self.counter = 100
+                self.counter = self.def_counter
         if self.counter > 0:
             self.counter -= 1
         self.heath_bar()
