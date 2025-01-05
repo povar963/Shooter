@@ -12,7 +12,7 @@ class Enemy(pg.sprite.Sprite):
     def __init__(self, *groups: list):
         super().__init__(*groups)
         x = random.randint(70, screen.get_width() - 70)
-        y = random.randint(70, screen.get_width() - 70)
+        y = random.randint(70, screen.get_height() - 70)
         self.image = self.img
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -55,7 +55,7 @@ class Player(pg.sprite.Sprite):
 
     def __init__(self, *groups: list):
         super().__init__(*groups)
-        self.health = 3
+        self.health = 1
         self.image = self.img
         self.rect = self.image.get_rect()
         self.speed = 5
@@ -164,7 +164,7 @@ class BulletF(pg.sprite.Sprite):
 
 
 if __name__ == "__main__":
-    screen = pg.display.set_mode((900, 900))
+    screen = pg.display.set_mode((1920, 1080))
     # Создание группы пуль
     bullets = pg.sprite.Group()
     # Создание вржеской группы
@@ -174,6 +174,7 @@ if __name__ == "__main__":
     player = Player([player_group])
     # Задача шрифта
     f1 = pg.font.Font(None, 36)
+
     # Задача времени запуска программы
     start_start = time.time()
     # Включение спавна
@@ -213,15 +214,18 @@ if __name__ == "__main__":
 
             pg.draw.line(screen, "red", (fx, fy), (lx, fy), 6)
         else:
-            w = 60
-            fy = screen.get_height() / 2 + w / 2
+            w = int(screen.get_height() / 3)
+            fy = int(screen.get_height() / 3) + w / 2
+            f2 = pg.font.Font(None, int(w/2))
             pg.draw.line(screen, "black", (0, fy), (screen.get_width(), fy), w)
+            text_end = f2.render(f"Lose", 1, (180, 0, 0))
+            screen.blit(text_end, (int(screen.get_width() / 2 - text_end.get_width()/2), fy - text_end.get_height()/2))
         elapsed = time.time() - start_start
-        text2 = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
+        text_seconds = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
 
         text1 = f1.render(f"hp:{player.health} cd:{player.counter}", 1, (180, 0, 0))
         screen.blit(text1, (10, screen.get_height() - 30))
-        screen.blit(text2, (screen.get_width() / 2 - text2.get_width(), 10))
+        screen.blit(text_seconds, (screen.get_width() / 2 - text_seconds.get_width(), 10))
         pg.display.flip()
         clock.tick(60)
 pg.quit()
