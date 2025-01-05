@@ -5,6 +5,7 @@ pg.init()
 
 class Button:
     f1 = pg.font.Font(None, 36)
+
     def __init__(self, text: str, color: str, x: int, y: int, lx: int, ly: int):
         self.text = text
         self.color = color
@@ -14,19 +15,23 @@ class Button:
         self.ly = ly
 
     def draw(self):
-        pg.draw.rect(screen, self.color, ((self.x, self.y), (self.lx, self.ly)), 2)
-        text1 = self.f1.render(f"sse", 1, (0, 180, 0))
-        x = self.lx / 2 - self.x
-        y = self.lx / 2 - self.y
+        btn = pg.draw.rect(screen, self.color, ((self.x, self.y), (self.lx, self.ly)), 2)
+        text1 = self.f1.render(self.text, 1, (0, 180, 0))
+        x = btn.width / 2 + self.x - text1.get_width() / 2
+        y = btn.height / 2 + self.y - text1.get_height() / 2
+
         screen.blit(text1, (x, y))
+
+    def update(self):
+        pass
 
 
 if __name__ == "__main__":
     run = True
-    size = w, h = 1920, 1080
+    size = w, h = 900, 900
     screen = pg.display.set_mode(size)
-    button1 = Button("Start", "red", 10, h/2 - 100, 280, 90)
-    button2 = Button("Start", "red", 10, h/2 + 10, 280, 90)
+    button1 = Button("Start", "red", 10, h / 2 - 100, 180, 90)
+    button2 = Button("Shop", "red", 10, h / 2 + 10, 180, 90)
     while run:
         screen.fill('grey')
         for event in pg.event.get():
