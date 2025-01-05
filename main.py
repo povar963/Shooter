@@ -77,11 +77,17 @@ class Player(pg.sprite.Sprite):
         lx = self.rect.center[0] + 60
         fy = self.rect.center[1] - 100
         pg.draw.line(screen, "DarkRed", (fx, fy), (lx, fy), 10)
-
         fx = self.rect.center[0] - 58
         lx = fx + (116 * (self.health / 3))
-
         pg.draw.line(screen, "red", (fx, fy), (lx, fy), 6)
+        fx = fx - 20
+        lx = fx + 10
+        if self.counter == 0:
+            pg.draw.line(screen, "green", (fx, fy), (lx, fy), 10)
+        else:
+            pg.draw.line(screen, "red", (fx, fy), (lx, fy), 10)
+        text1 = f1.render(f"hp:{player.health} cd:{player.counter}", 1, (180, 0, 0))
+        screen.blit(text1, (10, screen.get_height() - 30))
 
     def laser(self):
         mouse_x, mouse_y = pg.mouse.get_pos()
@@ -230,8 +236,6 @@ if __name__ == "__main__":
                 start_time = time.time()
         text_seconds = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
 
-        text1 = f1.render(f"hp:{player.health} cd:{player.counter}", 1, (180, 0, 0))
-        screen.blit(text1, (10, screen.get_height() - 30))
         screen.blit(text_seconds, (screen.get_width() / 2 - text_seconds.get_width(), 10))
         pg.display.flip()
         clock.tick(60)
