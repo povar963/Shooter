@@ -55,7 +55,7 @@ class Player(pg.sprite.Sprite):
 
     def __init__(self, *groups: list):
         super().__init__(*groups)
-        self.health = 3
+        self.health = 1
         self.image = self.img
         self.rect = self.image.get_rect()
         self.speed = 5
@@ -214,14 +214,16 @@ if __name__ == "__main__":
             pg.draw.line(screen, "red", (fx, fy), (lx, fy), 6)
         else:
             w = 60
-            fy = screen.get_height() / 2 + w / 2
+            fy = (screen.get_height() / 2)
             pg.draw.line(screen, "black", (0, fy), (screen.get_width(), fy), w)
+            text_end = f1.render(f"Lose", 1, (180, 0, 0))
+            text_end.blit(text_end, (10, fy))
         elapsed = time.time() - start_start
-        text2 = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
+        text_seconds = f1.render(f"{int(elapsed)}", 1, (180, 0, 0))
 
         text1 = f1.render(f"hp:{player.health} cd:{player.counter}", 1, (180, 0, 0))
         screen.blit(text1, (10, screen.get_height() - 30))
-        screen.blit(text2, (screen.get_width() / 2 - text2.get_width(), 10))
+        screen.blit(text_seconds, (screen.get_width() / 2 - text_seconds.get_width(), 10))
         pg.display.flip()
         clock.tick(60)
 pg.quit()
