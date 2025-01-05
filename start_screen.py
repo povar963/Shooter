@@ -23,8 +23,10 @@ class Button:
         screen.blit(text1, (x, y))
 
     def update(self):
-        pass
-
+        self.draw()
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        if self.x <= mouse_x <= self.lx + self.x and self.y <= mouse_y <= self.ly + self.y:
+            pass
 
 if __name__ == "__main__":
     run = True
@@ -37,6 +39,8 @@ if __name__ == "__main__":
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+            if event.type == pg.MOUSEBUTTONUP:
+                button1.update()
         button1.draw()
         button2.draw()
         pg.display.flip()
